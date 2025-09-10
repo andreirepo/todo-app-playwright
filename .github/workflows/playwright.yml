@@ -15,9 +15,6 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm install -g pnpm && pnpm install
-      - name: Install Playwright system dependencies
-        run: pnpm exec playwright install-deps
-
       - name: Install Playwright browsers
         run: pnpm exec playwright install
       - name: Run Playwright tests
