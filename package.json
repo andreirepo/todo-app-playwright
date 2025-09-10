@@ -1,0 +1,21 @@
+{
+  "name": "todo-app-playwright",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "pnpm exec playwright test",
+    "test:headed": "pnpm exec playwright test --headed",
+    "test:debug": "pnpm exec playwright test --debug",
+    "codegen": "pnpm exec playwright codegen",
+    "test:report": "pnpm exec playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.1",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^24.3.1"
+  }
+}
