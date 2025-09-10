@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "baseUrl": ".",
+        "paths": {
+            "@utils": ["utils/index.ts"],
+            "@apis": ["src/apis/index.ts"],
+            "@pages": ["src/pages/index.ts"],
+            "@models": ["src/models/index.ts"]
+        },
+        "types": ["@playwright/test", "node"],
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true
+    },
+    "include": ["playwright.config.ts", "tests", "src", "utils"]
+}
