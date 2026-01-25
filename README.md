@@ -16,5 +16,7 @@ This test suite validates the functionality of the Todo App available at https:/
 ## Running Tests
 
 ```bash
+pnpm i
+pnpm exec playwright install
 pnpm test
 ```
