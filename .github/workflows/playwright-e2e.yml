@@ -63,8 +63,13 @@ jobs:
           TEST_USER_EMAIL: ${{ vars.TEST_USER_EMAIL }}
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
       
-      - name: Run Allure Action
+      - name: Generate Allure Report
+        run: pnpm run report:generate
+        if: always()
+      
+      - name: Publish Allure Report
         uses: allure-framework/allure-action@v0
+        if: always()
         with:
-          report-directory: "./allure-report"
+          report-directory: allure-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
