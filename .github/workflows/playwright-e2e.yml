@@ -67,7 +67,7 @@ jobs:
         run: pnpm run report:generate
         if: always()
       
-      - name: Publish Allure Report
+      - name: Comment PR with Allure Report Summary
         uses: allure-framework/allure-action@v0
         if: always()
         with:
