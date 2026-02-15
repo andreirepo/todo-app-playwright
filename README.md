@@ -1,5 +1,7 @@
 # Playwright Test Suite
 
+[![CI: E2E Tests on Code Changes](https://github.com/andreirepo/todo-app-playwright/actions/workflows/playwright-e2e.yml/badge.svg)](https://github.com/andreirepo/todo-app-playwright/actions/workflows/playwright-e2e.yml)
+
 Automated tests for [Todo App](https://github.com/andreirepo/todo-app) using Playwright.
 
 ## Quick Start
