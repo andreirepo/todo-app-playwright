@@ -1,0 +1,94 @@
+name: "Playwright E2E Tests - Manual"
+on:
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - smoke
+          - regression
+          - critical
+          - visual
+          - accessibility
+      environment:
+        description: 'Environment to test against'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+          - development
+      parallel:
+        description: 'Run tests in parallel'
+        required: false
+        default: true
+        type: boolean
+      debug:
+        description: 'Enable debug mode'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+      
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+      
+      - name: Run Playwright tests
+        run: |
+          if [ "${{ github.event.inputs.test_suite }}" = "all" ]; then
+            pnpm exec playwright test
+          else
+            pnpm exec playwright test --grep "${{ github.event.inputs.test_suite }}"
+          fi
+        env:
+          APP_ENV: ${{ github.event.inputs.environment }}
+          BASE_URL: ${{ vars.BASE_URL }}
+          TEST_USER_EMAIL: ${{ vars.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          DEBUG: ${{ github.event.inputs.debug }}
+      
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 30

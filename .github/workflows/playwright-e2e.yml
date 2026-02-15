@@ -1,9 +1,22 @@
-name: Playwright Tests
+name: "Playwright E2E Tests - Automated"
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Test suite to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - smoke
+          - regression
+          - critical
+
 jobs:
   test:
     timeout-minutes: 60
