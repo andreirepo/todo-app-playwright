@@ -1,0 +1,162 @@
+# Coding Standards and Git Commit Rules
+
+This project uses AI-assisted development with Cursor IDE. These rules ensure proper version control and change tracking for all AI-generated modifications.
+
+## Git Commit Requirements
+
+### Mandatory Commit After AI Changes
+- **Every AI-generated change must be committed immediately** after completion
+- This includes file creation, modifications, refactoring, or any code changes
+- Commits should be atomic and focused on a single change or related set of changes
+- Never make multiple unrelated changes in a single commit
+
+### Commit Message Standards
+- Use clear, descriptive commit messages that explain **what** was changed and **why**
+- Follow conventional commit format when possible: `type(scope): description`
+- Examples:
+  - `feat(test): add Page Object Model rules for todo app`
+  - `refactor(page): extract selectors to separate files`
+  - `fix(api): correct todo deletion endpoint handling`
+  - `docs: add test environment context documentation`
+
+### Change Scope Definition
+**Commit required for:**
+- New file creation
+- Significant code modifications (>5 lines or logic changes)
+- Refactoring operations
+- Bug fixes
+- New feature implementation
+- Configuration changes
+
+**Commit optional for:**
+- Minor formatting changes
+- Comment additions
+- Whitespace adjustments
+
+## AI Agent Safety Rules
+
+### Preventing Destructive Operations
+- **NEVER** delete entire directories or multiple files in a single operation
+- **NEVER** perform mass file operations without explicit user approval
+- **ALWAYS** prefer targeted, surgical changes over broad modifications
+- **NEVER** modify critical configuration files (package.json, tsconfig.json, gitignore) without clear justification
+
+### Change Tracking and Revertibility
+- Each AI-generated change should be easily identifiable and revertible
+- Use `git status` and `git diff` to review changes before committing
+- Maintain a clean commit history that shows the evolution of AI-assisted changes
+- Use `git log --oneline` to track AI-generated commits
+
+### File Modification Guidelines
+- Prefer creating new files over modifying existing ones when possible
+- When modifying existing files, make minimal, focused changes
+- Always preserve existing functionality and test coverage
+- Document the purpose of each change in the commit message
+
+## Git Workflow Integration
+
+### Pre-Commit Checklist
+Before each commit, ensure:
+1. All changes are tested and functional
+2. No sensitive information (passwords, keys, tokens) is committed
+3. Changes follow existing code style and patterns
+4. Commit message accurately describes the changes
+
+### Branch Management
+- Use feature branches for significant AI-assisted development
+- Keep main/master branch stable
+- Use descriptive branch names: `ai/feature-name` or `ai/fix-description`
+
+### Integration with Testing
+- Run tests before committing AI-generated changes
+- Ensure new code doesn't break existing functionality
+- Update tests when necessary to cover new functionality
+
+## Error Prevention
+
+### Before Making Changes
+1. **Review existing code** to understand current patterns and conventions
+2. **Check for dependencies** that might be affected by the change
+3. **Verify the change is necessary** and aligns with project goals
+4. **Plan the commit** - what files will change and why
+
+### During Changes
+1. **Work incrementally** - make small, testable changes
+2. **Use git status frequently** to track modifications
+3. **Test as you go** - don't wait until the end to verify functionality
+4. **Document your reasoning** in comments or commit messages
+
+### After Changes
+1. **Review all modifications** with `git diff`
+2. **Test the complete functionality** affected by the changes
+3. **Commit immediately** with a clear message
+4. **Push to remote** if working on shared branches
+
+## Recovery and Rollback
+
+### If Something Goes Wrong
+1. **Stop immediately** - don't make additional changes
+2. **Assess the damage** - what files were affected?
+3. **Use git to revert** - `git revert` or `git reset` as appropriate
+4. **Communicate the issue** - inform the development team
+5. **Learn from the mistake** - update these rules if needed
+
+### Emergency Rollback Procedures
+- For critical issues: `git reset --hard HEAD~1` (revert last commit)
+- For specific file issues: `git checkout HEAD~1 -- filename`
+- For branch issues: `git reset --hard origin/branch-name`
+
+## AI Agent Accountability
+
+### Change Documentation
+- Every AI-generated change should be clearly identifiable
+- Use commit messages that indicate AI assistance when appropriate
+- Maintain a changelog of significant AI-assisted modifications
+
+### Quality Assurance
+- AI-generated code must meet the same quality standards as human-written code
+- All changes must be reviewable and understandable by human developers
+- Maintain code consistency with existing project patterns
+
+### Continuous Improvement
+- Regularly review and update these rules based on experience
+- Share learnings from AI-assisted development practices
+- Adapt rules as the project and AI capabilities evolve
+
+## Examples
+
+### Good AI Commit
+```
+feat(page): add TodoPage class with complete CRUD operations
+
+- Create TodoPage.page.ts with addTodo, completeTodo, deleteTodo methods
+- Add TodoPage.selectors.ts with role-based locators
+- Implement proper error handling and validation
+- Follow existing Page Object Model patterns
+
+# AI-generated change - easily revertible
+```
+
+### Bad AI Commit
+```
+update stuff
+
+# Vague message, unclear what changed
+```
+
+### Dangerous AI Operation (Avoid)
+```
+# DO NOT DO: Delete multiple files at once
+rm -rf src/pages/* && rm -rf tests/*
+```
+
+### Safe AI Operation
+```
+# DO: Create new page class
+touch src/pages/newPage.page.ts
+# Then commit immediately
+git add src/pages/newPage.page.ts
+git commit -m "feat(page): add newPage class structure"
+```
+
+These rules ensure that AI-assisted development enhances productivity while maintaining code quality, version control best practices, and the ability to quickly revert changes when needed.

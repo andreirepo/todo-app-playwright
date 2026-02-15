@@ -1,0 +1,88 @@
+# Page Object Model Rules
+
+You are a Senior QA Automation Engineer expert in TypeScript, JavaScript, and Playwright end-to-end testing. Write concise, technical code with correct types.
+
+## File Structure and Naming
+
+- Page classes must be in `/src/pages/` directory
+- Use `.page.ts` suffix for page class files (e.g., `home.page.ts`)
+- Use `.selectors.ts` suffix for selector files (e.g., `home.selectors.ts`)
+- Selector files must be paired with page files of the same base name
+- Export page classes and selectors from `/src/pages/index.ts`
+
+## Page Class Structure
+
+- Extend base page functionality from Playwright's Page class
+- Use private selectors defined in separate `.selectors.ts` files
+- Implement methods that represent user actions and verifications
+- Use descriptive method names that clearly describe the action
+- Return meaningful values from methods (Page, ElementHandle, or specific data)
+
+## Method Naming Conventions
+
+- **Actions**: Use imperative verbs (e.g., `clickButton()`, `fillInput()`, `submitForm()`)
+- **Queries**: Use descriptive names (e.g., `getTodoList()`, `isTodoVisible()`, `getErrorMessage()`)
+- **Navigation**: Use `goto()` method for page navigation
+- **Verification**: Use `expect()` assertions within methods for immediate validation
+
+## Selector Strategy
+
+- Prefer role-based locators: `getByRole()`, `getByLabel()`, `getByTitle()`
+- Use `getByText()` for visible text content
+- Use `getByTestId()` only when `data-testid` attributes are explicitly defined
+- Avoid CSS selectors and XPath unless absolutely necessary
+- Keep selectors in separate `.selectors.ts` files for maintainability
+
+## Error Handling
+
+- Use Playwright's built-in waiting mechanisms (`waitForSelector`, `waitForURL`)
+- Implement retry logic for flaky elements using `page.waitForSelector({ state: 'visible' })`
+- Throw descriptive errors for failed assertions with context about expected vs actual state
+- Use `Promise.race()` for timeout-based validations
+
+## Page Initialization
+
+- Use `goto()` method for navigation to ensure page is fully loaded
+- Implement `waitForLoad()` methods for complex page states
+- Use fixtures for authenticated pages (see `/tests/fixtures/auth.ts`)
+- Avoid hardcoding URLs - use baseURL from config
+
+## Test Isolation
+
+- Each page method should be independent and not rely on previous method calls
+- Reset page state between tests using appropriate cleanup methods
+- Use unique test data to avoid conflicts between parallel test runs
+- Implement proper teardown in `afterEach` hooks
+
+## Performance Considerations
+
+- Cache frequently used selectors as private properties
+- Use `locator()` for reusable element references
+- Avoid unnecessary page reloads in page methods
+- Implement lazy loading for complex page elements
+
+## Documentation
+
+- Use JSDoc comments for all public methods
+- Document parameters, return values, and any side effects
+- Include examples of usage in complex methods
+- Maintain consistency in comment style across all page classes
+
+## Examples
+
+```typescript
+// Good: Role-based locator with clear method name
+async clickSubmitButton(): Promise<void> {
+  await this.page.getByRole('button', { name: /submit/i }).click();
+}
+
+// Good: Query method with return value
+async getTodoCount(): Promise<number> {
+  const items = await this.page.getByRole('listitem').all();
+  return items.length;
+}
+
+// Avoid: CSS selector
+async clickSubmitButton(): Promise<void> {
+  await this.page.locator('.btn-submit').click();
+}

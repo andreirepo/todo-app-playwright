@@ -1,0 +1,97 @@
+# Test Environment Context
+
+This project uses Playwright for comprehensive end-to-end testing of a todo application with both UI and API test coverage.
+
+## Environment Configuration
+
+### Multi-Environment Support
+- **Development**: Uses `.env.dev` file for local testing
+- **Production**: Uses `.env.prod` file for production testing
+- **CI/CD**: Environment variables set via CI pipeline
+- **Base URL**: Configured via `BASE_URL` environment variable or defaults to `https://todo.andreiqa.click`
+
+### Test User Management
+- **Test User Credentials**: Managed via `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` environment variables
+- **Authentication**: Dedicated test user for signed-in test scenarios
+- **Environment Files**: Located in `/config/` directory with pattern `.env.{env}`
+
+## Browser Testing
+
+### Supported Browsers
+- **Chromium**: Primary browser for testing
+- **Firefox**: Cross-browser compatibility
+- **WebKit**: Safari compatibility testing
+- **Mobile**: Configured for responsive testing (commented out in config)
+
+### Parallel Execution
+- **Workers**: Configured per environment (1 for CI, multiple for local)
+- **Fully Parallel**: Enabled for optimal test execution speed
+- **Retries**: 2 retries on CI, 0 retries locally for faster feedback
+
+## Test Organization
+
+### Test Types
+- **Basic Page Load**: `tests/basicPageLoad.test.ts` - Ensures application loads correctly
+- **Accessibility**: `tests/accessibility.test.ts` - A11y compliance testing
+- **Registration**: `tests/registration.test.ts` - User registration flow
+- **Todo Functionality**: `tests/todo.test.ts` - Core todo app features
+- **API Testing**: `tests/api/todos.api.test.ts` - Backend API validation
+
+### Page Object Model
+- **Structure**: `/src/pages/` contains all page classes
+- **Separation**: Page logic in `.page.ts` files, selectors in `.selectors.ts` files
+- **API Layer**: `/src/apis/` contains API client implementations
+- **Fixtures**: `/tests/fixtures/auth.ts` provides authentication utilities
+
+## Test Data Management
+
+### Isolation Strategy
+- **Unique Test Data**: Each test uses unique data to prevent conflicts
+- **Parallel Safety**: Tests designed to run safely in parallel
+- **Cleanup**: Proper teardown in `afterEach` hooks
+- **Database State**: API tests include setup/teardown for clean state
+
+### Environment-Specific Data
+- **Development**: Uses local test data and staging environment
+- **Production**: Uses production-like test data
+- **CI/CD**: Uses environment-specific configurations
+
+## CI/CD Integration
+
+### Test Execution
+- **Command**: `pnpm test` runs all tests
+- **Headed Mode**: `pnpm test:headed` for debugging
+- **Debug Mode**: `pnpm test:debug` for interactive debugging
+- **Code Generation**: `pnpm codegen` for test creation
+
+### Reporting
+- **HTML Reporter**: Default reporter for detailed test results
+- **Trace Viewer**: Enabled on first retry for debugging
+- **Screenshots**: Automatic on failure for visual debugging
+
+## Performance Considerations
+
+### Test Speed
+- **Parallel Execution**: Maximized through proper test isolation
+- **Smart Waits**: Uses Playwright's auto-waiting to reduce flakiness
+- **Efficient Locators**: Role-based locators for faster element resolution
+- **Minimal Setup**: Lightweight test setup and teardown
+
+### Resource Management
+- **Browser Reuse**: Efficient browser instance management
+- **Memory Usage**: Optimized for CI environments with limited resources
+- **Network Requests**: Controlled through proper waiting strategies
+
+## Best Practices
+
+### Test Writing
+- **Descriptive Names**: Test names clearly describe expected behavior
+- **Independent Tests**: Each test can run in isolation
+- **Clear Assertions**: Use Playwright's web-first assertions
+- **Error Messages**: Descriptive error messages for debugging
+
+### Maintenance
+- **Page Object Updates**: Update page classes when UI changes
+- **Selector Maintenance**: Keep selectors up-to-date with UI changes
+- **Test Data Refresh**: Regular review of test data validity
+- **Performance Monitoring**: Monitor test execution time and flakiness
